@@ -10,7 +10,7 @@ Future pushReplacement({required  BuildContext context, required Widget screen,}
     return screen;
   }));
 }
-Future pushAndReplace({required  BuildContext context, required Widget screen,})async{
+Future pushAndRemoveUntil({required  BuildContext context, required Widget screen,})async{
   return   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => screen,), (route) => false);
 }
 Future popPage({required  BuildContext context})async{

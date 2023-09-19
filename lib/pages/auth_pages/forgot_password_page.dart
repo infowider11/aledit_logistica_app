@@ -19,6 +19,8 @@ class ForgotPasswordPage extends StatefulWidget {
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   TextEditingController emailAddress = TextEditingController();
   TextEditingController password = TextEditingController();
+  ValueNotifier<bool> pageLoading = ValueNotifier(false);
+
   final forgotPassFormKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -70,14 +72,23 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     vSizedBox2,
                     Consumer<AuthProvider>(
                         builder: (context, authPovider, child) {
-                      return RoundEdgedButton(
-                        text: "Submit",
-                        onTap: () {
-                          if (forgotPassFormKey.currentState!.validate()) {
-                            authPovider.forgetPassword(context);
-                          }
-                        },
-                      );
+                      return ValueListenableBuilder(
+                          valueListenable: pageLoading,
+                          builder: (context, pageLoadingValue, child) {
+                            return RoundEdgedButton(
+                              text: "Submit",
+                              load: pageLoadingValue,
+                              onTap: () {
+                                pageLoading.value = true;
+                                if (forgotPassFormKey.currentState!
+                                    .validate()) {
+                                  authPovider.forgetPassword(context,
+                                      email: emailAddress.text,
+                                      load: pageLoading);
+                                }
+                              },
+                            );
+                          });
                     })
                   ],
                 ),

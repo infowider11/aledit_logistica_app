@@ -1,4 +1,4 @@
-   import 'package:aledit_logistica/modals/user_modal.dart';
+import 'package:aledit_logistica/modals/user_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,3 +9,8 @@ ValueNotifier<bool> showHide = ValueNotifier(true);
 late SharedPreferences sharedPreference;
 
 double globalBoxBorderRadius = 6;
+Map<String, String> globalHeaders = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+  // 'Authorization': 'Bearer  kgfklgfklagkljas'
+};

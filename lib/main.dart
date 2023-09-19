@@ -1,6 +1,7 @@
 import 'package:aledit_logistica/constants/global_keys.dart';
 import 'package:aledit_logistica/pages/auth_pages/splash_screen.dart';
 import 'package:aledit_logistica/providers/auth_provider.dart';
+import 'package:aledit_logistica/providers/order_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<AuthProvider>(
         create: (_) => AuthProvider(),
+      ),
+        ChangeNotifierProvider<OrderProvider>(
+        create: (_) => OrderProvider(),
       ),
       ],
       child: MaterialApp(

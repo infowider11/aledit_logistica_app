@@ -21,99 +21,109 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  ValueNotifier<bool> pageLoading = ValueNotifier(false);
+
   final loginFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AuthProvider>(
-      create: (context) => AuthProvider(),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Stack(
-          children: [
-            Positioned(
-              right: 0,
-              top: 0,
-              child: Image.asset(
-                MyImagesUrl.loginScreenLogo,
-                height: 150,
-                width: 150,
-              ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          Positioned(
+            right: 0,
+            top: 0,
+            child: Image.asset(
+              MyImagesUrl.loginScreenLogo,
+              height: 150,
+              width: 150,
             ),
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Form(
-                key: loginFormKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const ParagraphText(
-                      "Staff Sign In",
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                      color: MyColors.blackColor,
-                    ),
-                    vSizedBox05,
-                    const ParagraphText(
-                      "Please enter your registered email id and password",
-                      fontSize: 14,
-                      color: MyColors.blackColor,
-                    ),
-                    vSizedBox,
-                    CustomTextField(
-                      controller: emailController,
-                      obscureText: false,
-                      hintText: "Enter Email",
-                      validator: ValidationFunction.emailValidation,
-                      textInputType: TextInputType.emailAddress,
-                    ),
-                    vSizedBox2,
-                    CustomTextField(
-                      controller: passwordController,
-                      obscureText: true,
-                      hintText: "Enter Password",
-                      validator: ValidationFunction.passwordValidation,
-                      textInputType: TextInputType.emailAddress,
-                    ),
-                    vSizedBox2,
-                    GestureDetector(
-                      onTap: () {
-                        push(
-                          context: context,
-                          screen: const ForgotPasswordPage(),
-                        );
-                      },
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        child: const ParagraphText(
-                          "Forgot Password?",
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: MyColors.blackColor,
-                        ),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Form(
+              key: loginFormKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const ParagraphText(
+                    "Staff Sign In",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                    color: MyColors.blackColor,
+                  ),
+                  vSizedBox05,
+                  const ParagraphText(
+                    "Please enter your registered email id and password",
+                    fontSize: 14,
+                    color: MyColors.blackColor,
+                  ),
+                  vSizedBox,
+                  CustomTextField(
+                    controller: emailController,
+                    obscureText: false,
+                    hintText: "Enter Email",
+                    validator: ValidationFunction.emailValidation,
+                    textInputType: TextInputType.emailAddress,
+                  ),
+                  vSizedBox2,
+                  CustomTextField(
+                    controller: passwordController,
+                    obscureText: true,
+                    hintText: "Enter Password",
+                    validator: ValidationFunction.passwordValidation,
+                    textInputType: TextInputType.emailAddress,
+                  ),
+                  vSizedBox2,
+                  GestureDetector(
+                    onTap: () {
+                      push(
+                        context: context,
+                        screen: const ForgotPasswordPage(),
+                      );
+                    },
+                    child: Container(
+                      alignment: Alignment.centerRight,
+                      child: const ParagraphText(
+                        "Forgot Password?",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color: MyColors.blackColor,
                       ),
                     ),
-                    vSizedBox2,
-                    Consumer<AuthProvider>(
-                        builder: (context, authPovider, child) {
-                      return RoundEdgedButton(
-                        text: "Sign In",
-                        onTap: () {
-                          if (loginFormKey.currentState!.validate()) {
-                            authPovider.loginFunction(context, email: emailController.text, password: passwordController.text);
-                          }
-                        },
-                      );
-                    })
-                  ],
-                ),
+                  ),
+                  vSizedBox2,
+                  Consumer<AuthProvider>(
+                      builder: (context, authPovider, child) {
+                    return ValueListenableBuilder(
+                      valueListenable: pageLoading,
+                      builder: (context, pageLoadingValue, child) {
+                        return RoundEdgedButton(
+                          text: "Sign In",
+                          load: pageLoadingValue,
+                          onTap: () {
+                            if (loginFormKey.currentState!.validate()) {
+                              pageLoading.value = true;
+                              authPovider.loginFunction(context,
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                  load: pageLoading
+                                  );
+                            }
+                          },
+                        );
+                      },
+                    );
+                  })
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

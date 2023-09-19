@@ -31,7 +31,7 @@ Future<bool?>  showCustomConfirmationDialog(
                 ),
                 vSizedBox,
                 if(description!=null)
-                ParagraphText( description!),
+                ParagraphText( description),
                 if(description!=null)
                 vSizedBox2,
                 Row(

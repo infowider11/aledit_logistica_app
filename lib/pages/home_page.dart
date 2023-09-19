@@ -23,11 +23,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   TextEditingController orderIdController = TextEditingController();
   final orderIdFormKey = GlobalKey<FormState>();
-  
+  ValueNotifier<bool> pageLoading = ValueNotifier(false);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,13 +50,13 @@ class _HomePageState extends State<HomePage> {
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    AppBarHeadingText(
+                    const AppBarHeadingText(
                       text: 'Good Morning,',
                       color: Colors.black,
                     ),
                     Expanded(
                         child: AppBarHeadingText(
-                      text: ' ${userData?.firstName}',
+                      text: ' ${userData?.user!.name}',
                       color: MyColors.primaryColor,
                       fontWeight: FontWeight.w700,
                     ))
@@ -64,9 +64,9 @@ class _HomePageState extends State<HomePage> {
                 );
               }),
         ),
-        drawer: CustomSideDrawer(),
+        drawer: const CustomSideDrawer(),
         body: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
               ),
               vSizedBox6,
               Padding(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 16,
                 ),
                 child: Form(
@@ -85,30 +85,49 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SubHeadingText('Order ID'),
+                      const SubHeadingText('Order ID'),
                       vSizedBox05,
-                      ParagraphText(
+                      const ParagraphText(
                         'Please enter your order id',
                         color: Colors.black54,
                       ),
                       vSizedBox,
-                      CustomTextField(controller: orderIdController, hintText: '#53210ACD', validator: ValidationFunction.orderIdValidation,),
+                      CustomTextField(
+                        controller: orderIdController,
+                        hintText: '#53210ACD',
+                        validator: ValidationFunction.orderIdValidation,
+                      ),
                       vSizedBox2,
-                      RoundEdgedButton(text: 'Process', onTap: (){
-                        if(orderIdFormKey.currentState!.validate()){
-
-                          OrderModal  orderModal= OrderModal(orderId: orderIdController.text, shippingStore: '1', noOfBoxes: 3);
-                          push(context: context, screen: ChangeNotifierProvider(
-                            create: (context) => OrderProvider(orderModal),
-                            child: OrderDetailPage(),
-                          ),);
-                        }
-                      },),
+                      Consumer<OrderProvider>(
+                        builder: (context, orderProvider, child) {
+                          return ValueListenableBuilder(
+                            valueListenable: pageLoading,
+                            builder: (context, pageLoadingValue, child) {
+                              return RoundEdgedButton(
+                                text: 'Process',
+                                load: pageLoadingValue,
+                                onTap: () async {
+                                  if (orderIdFormKey.currentState!.validate()) {
+                                    pageLoading.value = true;
+                                    orderProvider.getOrderDetail(context,
+                                        orderId: orderIdController.text,
+                                        load: pageLoading);
+                                    // OrderModal orderModal = OrderModal(
+                                    //     orderId: orderIdController.text,
+                                    //     shippingStore: '1',
+                                    //     noOfBoxes: 3);
+                                   
+                                  }
+                                },
+                              );
+                            },
+                          );
+                        },
+                      )
                     ],
                   ),
                 ),
               ),
-
             ],
           ),
         ));
