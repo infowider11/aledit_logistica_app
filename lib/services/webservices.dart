@@ -64,13 +64,13 @@ class Webservices {
             // showSnackbar(jsonResponse['message']);
              await showCommonAlertDailog(
                 MyGlobalKeys.navigatorKey.currentContext!,
-                message: jsonResponse['message']);
+                headingText: jsonResponse['message']);
           }
           return jsonResponse;
         } else {
           if (showErrorMessage) {
-            showCommonAlertDailog(MyGlobalKeys.navigatorKey.currentContext!,
-                message: jsonResponse['message'], successIcon: false);
+          await  showCommonAlertDailog(MyGlobalKeys.navigatorKey.currentContext!,
+                headingText: jsonResponse['message'], successIcon: false);
             // showSnackbar(jsonResponse['message']);
           }
         }
@@ -81,8 +81,8 @@ class Webservices {
           if (showErrorMessage) {
             var jsonResponse = convert.jsonDecode(response.body);
             // showSnackbar(jsonResponse['message']);
-            showCommonAlertDailog(MyGlobalKeys.navigatorKey.currentContext!,
-                message: jsonResponse['message'], successIcon: false);
+           await showCommonAlertDailog(MyGlobalKeys.navigatorKey.currentContext!,
+                headingText: jsonResponse['message'], successIcon: false);
           }
         } catch (e) {
           print('Error in  catch block 39 $e');
@@ -130,7 +130,7 @@ class Webservices {
             // showSnackbar(jsonResponse['message']);
             await showCommonAlertDailog(
                 MyGlobalKeys.navigatorKey.currentContext!,
-                message: jsonResponse['message']);
+                headingText: jsonResponse['message']);
           }
           return jsonResponse['data'] ??
               jsonResponse['content'] ??
@@ -262,14 +262,14 @@ class Webservices {
       if (jsonResponse['status'].toString() == '1') {
         if (successAlert) {
           // showSnackbar(jsonResponse['message']);
-          showCommonAlertDailog(MyGlobalKeys.navigatorKey.currentContext!,
-              message: jsonResponse['message']);
+        await  showCommonAlertDailog(MyGlobalKeys.navigatorKey.currentContext!,
+              headingText: jsonResponse['message']);
         }
       } else {
         if (errorAlert) {
           // showSnackbar(jsonResponse['message']);
-          showCommonAlertDailog(MyGlobalKeys.navigatorKey.currentContext!,
-              message: jsonResponse['message'], successIcon: false);
+       await   showCommonAlertDailog(MyGlobalKeys.navigatorKey.currentContext!,
+              headingText: jsonResponse['message'], successIcon: false);
         }
       }
       return jsonResponse;

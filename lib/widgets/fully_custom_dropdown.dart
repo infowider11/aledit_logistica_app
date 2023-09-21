@@ -139,7 +139,6 @@ class CustomDropDownFeild extends StatelessWidget {
         if (headingText != null) vSizedBox,
         DropdownButtonFormField(
           value: selectedValue,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
           isDense: true,
            isExpanded: true,
            menuMaxHeight: 300,

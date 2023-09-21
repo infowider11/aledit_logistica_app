@@ -74,8 +74,8 @@ class AuthProvider with ChangeNotifier {
       'password': password,
     };
 
-    var loginResponse = await Webservices.postData(
-        apiUrl: ApiUrls.loginUrl, request: request, showSuccessMessage: true);
+    var loginResponse =
+        await Webservices.postData(apiUrl: ApiUrls.loginUrl, request: request);
     if (loginResponse['status'] == 1) {
       userDataNotifier.value = UserModal.fromJson(loginResponse['data']);
       updateUserDataInSharedPreference(userData: loginResponse['data']);
@@ -86,7 +86,7 @@ class AuthProvider with ChangeNotifier {
 
   logout(BuildContext context) async {
     sharedPreference.clear();
-    pushAndRemoveUntil(context: context, screen: LoginPage());
+    pushAndRemoveUntil(context: context, screen: const LoginPage());
   }
 
   updateUserDataInSharedPreference({required Map userData}) {

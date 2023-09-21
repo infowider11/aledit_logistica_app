@@ -76,7 +76,9 @@ class _QRScanerState extends State<QRScaner> {
             await cameraController.stop();
             // barcodes.barcodes.map((e) => print('found the qr code id ${e.displayValue}'));
             showCommonAlertDailog(context,
-                headingText: 'Successfully Scanned ',
+                headingText: 'Scanned successfully',
+                message:
+                    "The product qr code is :- ${barcodes.barcodes[0].displayValue}",
                 actions: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -99,14 +101,13 @@ class _QRScanerState extends State<QRScaner> {
                         height: 40,
                         onTap: () {
                           popPage(context: context);
-                          popPage(context: context);
+                          Navigator.pop(context,'${barcodes.barcodes[0].displayValue}');
                         },
                       )
                     ],
                   )
                 ],
-                message:
-                    "The Qr Code is that :- ${barcodes.barcodes[0].displayValue} \nThank you");
+                );
             // print(
             //     "found the qr code id ${barcodes.barcodes[0].displayValue}");
           },

@@ -14,10 +14,9 @@ class CustomLoader extends StatelessWidget {
     //   ),
     // );
     return Center(
-      child: cupertino.CupertinoActivityIndicator(
-        color:color?? MyColors.primaryColor,
-      )
-    );
+        child: cupertino.CupertinoActivityIndicator(
+          color: color ?? MyColors.primaryColor,
+        ));
     // return cupertino.CupertinoActivityIndicator
   }
 }
